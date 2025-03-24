@@ -9,11 +9,11 @@
 
 44.-    SELECT * FROM asignaturas AS a1 WHERE EXISTS (SELECT * FROM notas AS n2 WHERE a1.COD = n2.ASIGNATURA GROUP BY n2.ASIGNATURA HAVING COUNT(*)=0) AND NOMBRE LIKE '%os%';
 
-45.-    SELECT * FROM asignaturas AS a1 WHERE NOT EXISTS (SELECT * FROM notas AS n2 WHERE a1.COD = n2.ASIGNATURA GROUP BY n2.ASIGNATURA HAVING COUNT(ASIGNATURA)=0) ORDER BY COD DESC; (REVISAR)
 
 46.-    SELECT 
 
 
+48.-    SELECT
 
 
 50.-    SELECT * FROM empleados, depart;
@@ -32,4 +32,4 @@
 
 57.-    SELECT notas.nota FROM asignaturas JOIN alumnos JOIN notas on asignaturas.COD = notas.asignatura and alumnos.codigo = notas.alumno WHERE alumnos.nombre like 'Ray' and asignaturas.nombre like 'FOL';
 
-58.-    SELECT empleados.apellido, empleados.SALARIO, depart.nombre FROM 
+58.-    SELECT empleados.apellido, empleados.SALARIO, depart.nombre FROM empleados JOIN depart 
