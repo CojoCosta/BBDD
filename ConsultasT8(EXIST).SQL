@@ -32,4 +32,20 @@
 
 57.-    SELECT notas.nota FROM asignaturas JOIN alumnos JOIN notas on asignaturas.COD = notas.asignatura and alumnos.codigo = notas.alumno WHERE alumnos.nombre like 'Ray' and asignaturas.nombre like 'FOL';
 
-58.-    SELECT empleados.apellido, empleados.SALARIO, depart.nombre FROM empleados JOIN depart 
+58.-    SELECT empleados.apellido, empleados.SALARIO, depart.nombre FROM empleados  JOIN depart USING(IDDEPART) WHERE empleados.OFICIO = (SELECT OFICIO FROM empleados where apellido = 'Gil' and comision IS null);
+
+59.-    SELECT AVG(SALARIO) FROM empleados  JOIN depart USING(IDDEPART) WHERE depart.nombre like 'Contabilidad';
+
+60.-    SELECT apellido FROM empleados JOIN depart USING(IDDEPART) WHERE empleados.SALARIO >ALL (SELECT SALARIO from empleados where IDDEPART IN(SELECT IDDEPART from depart WHERE NOMBRE like 'Ventas'));
+
+61.-    SELECT DISTINCT NOMBRE, COUNT(*) AS 'EMPLEADOS' FROM depart JOIN empleados USING(IDDEPART) GROUP BY depart.NOMBRE;
+
+62.-    SELECT MAX(SALARIO) AS 'MAXIMO', MIN(SALARIO) AS 'MIN', AVG(SALARIO) AS 'PROMEDIO' FROM empleados JOIN depart USING(IDDEPART) WHERE depart.NOMBRE LIKE 'Ventas';
+
+63.-    SELECT IDDEPART, depart.nombre, MAX(SALARIO) AS 'MAXIMO', MIN(SALARIO) AS 'MIN', AVG(SALARIO) AS 'PROMEDIO' FROM empleados JOIN depart USING(IDDEPART) GROUP BY IDDEPART;
+
+64.-    SELECT IDDEPART, depart.NOMBRE, empleados.OFICIO, MAX(SALARIO) AS 'MAXIMO', MIN(SALARIO) AS 'MIN', AVG(SALARIO) AS 'PROMEDIO' FROM empleados JOIN depart USING(IDDEPART) GROUP BY IDDEPART, OFICIO;
+
+64(B).-    SELECT IDDEPART, depart.NOMBRE, empleados.OFICIO, MAX(SALARIO) AS 'MAXIMO', MIN(SALARIO) AS 'MIN', AVG(SALARIO) AS 'PROMEDIO' FROM empleados JOIN depart USING(IDDEPART) GROUP BY IDDEPART, OFICIO HAVING MAXIMO < 2000;
+
+65.-    SELECT * from empleados JOIN depart USING(IDDEPART) WHERE 
