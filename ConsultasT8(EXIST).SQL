@@ -36,7 +36,7 @@
 
 59.-    SELECT AVG(SALARIO) FROM empleados  JOIN depart USING(IDDEPART) WHERE depart.nombre like 'Contabilidad';
 
-60.-    SELECT apellido FROM empleados JOIN depart USING(IDDEPART) WHERE empleados.SALARIO >ALL (SELECT SALARIO from empleados where IDDEPART IN(SELECT IDDEPART from depart WHERE NOMBRE like 'Ventas'));
+60.-    SELECT apellido FROM empleados JOIN depart USING(IDDEPART) WHERE empleados.SALARIO >ANY (SELECT SALARIO from empleados where IDDEPART IN(SELECT IDDEPART from depart WHERE NOMBRE like 'Ventas'));
 
 61.-    SELECT DISTINCT NOMBRE, COUNT(*) AS 'EMPLEADOS' FROM depart JOIN empleados USING(IDDEPART) GROUP BY depart.NOMBRE;
 
@@ -48,4 +48,21 @@
 
 64(B).-    SELECT IDDEPART, depart.NOMBRE, empleados.OFICIO, MAX(SALARIO) AS 'MAXIMO', MIN(SALARIO) AS 'MIN', AVG(SALARIO) AS 'PROMEDIO' FROM empleados JOIN depart USING(IDDEPART) GROUP BY IDDEPART, OFICIO HAVING MAXIMO < 2000;
 
-65.-    SELECT * from empleados JOIN depart USING(IDDEPART) WHERE 
+65.-    SELECT * from empleados JOIN depart USING(IDDEPART) where depart.nombre like 'Ventas' order by empleados.Salario DESC limit 1;
+
+66.-    SELECT depart.IDDEPART, empleados.IDDEPART, depart.nombre, count(*) AS 'Total' FROM depart JOIN empleados USING(IDDEPART) GROUP by depart.IDDEPART ORDER by Total desc limit 1;
+
+67.-    Realizan una tabla de apellido de empleado y nombre de su departamento
+    La forma de usar las distintas formas de usar el join dando un mismo resultado.
+
+68.-    SELECT apellido, nombre from empleados join depart using (IDDEPART) ORDER BY depart.NOMBRE;
+
+69.-    SELECT DISTINCT apellido, nombre from empleados NATURAL join depart;
+
+70.-    SELECT apellido, nombre from empleados NATURAL LEFT join depart;
+
+71.-    SELECT apellido, nombre from empleados NATURAL RIGHT join depart;
+
+72.-    SELECT asignaturas.NOMBRE, alumnos.NOMBRE, NOTAS.NOTA FROM asignaturas JOIN alumnos JOIN notas on asignaturas.COD = notas.asignatura and alumnos.codigo = notas.alumno WHERE notas.ALUMNO >= 5;
+
+73.-     
