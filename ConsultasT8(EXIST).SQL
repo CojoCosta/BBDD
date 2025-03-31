@@ -65,4 +65,4 @@
 
 72.-    SELECT asignaturas.NOMBRE, alumnos.NOMBRE, NOTAS.NOTA FROM asignaturas JOIN alumnos JOIN notas on asignaturas.COD = notas.asignatura and alumnos.codigo = notas.alumno WHERE notas.ALUMNO >= 5;
 
-73.-     
+73.-    SELECT IDDEPART, depart.nombre from depart join empleados USING(IDDEPART) ORDER BY empleados.Salario DESC LIMIT 1;
