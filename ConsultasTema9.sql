@@ -68,3 +68,56 @@ MAX_QUERIES_PER_HOUR 10;
 
 30.
 FLUSH PRIVILEGES;
+
+-----------------------VISTAS--------------------------
+31, 32, 33, 34, 35, 36, 42, 43, 45, 47, 49, 53, 55
+
+31.Crea una vista con nombre ed que muestre toda la información de la tabla empleados relacionada con la información de la tabla departamentos.
+CREATE OR REPLACE view ed AS SELECT * FROM tema5.empleados JOIN tema5.depart USING (IDDEPART);
+
+
+32. Muestra a partir de la vista creada en el ejercicio anterior las siguientes columnas: el apellido de los empleados, su oficio y el nombre del departamento al que pertenecen.
+SELECT apellido, oficio, nombre FROM ed;
+
+
+33. Modifica la vista ed con replace para que tenga las columnas: apellido, oficio y nombre del departamento cambiando sus nombres a los siguientes: nombre, oficio y departamento.
+CREATE OR REPLACE view ed(nombre, oficio, departamento) AS SELECT APELLIDO, OFICIO, NOMBRE FROM tema5.empleados JOIN tema5.depart USING (IDDEPART);
+
+
+34.A partir de la vista anterior define la vista ed2 que muestre el nombre del empleado y el nombre del departamento.
+CREATE OR REPLACE view ed2(nombredelempleado, nombredeldepartamento) AS SELECT nombre, departamento FROM tema5.ed;
+
+
+35. Elimina la vista ed.
+
+
+
+36.Consulta los datos de la vista ed2. ¿Que sucede?.
+
+
+
+42. Muestra la sentencia de creación de la vista notas_asig_alu.
+
+
+
+43.Crea la vista notasAlu a partir de la vista notas_asig_alu que muestre los siguientes campos: el nombre como nombre, la asignatura como materia y la nota como calificación de aquellos alumnos que han aprobado.
+
+
+
+45. Modifica la vista notasAlu con alter view y añádele el campo Apellido.
+
+
+
+47.Crea la vista salarios que muestre el apellido y la localización de los empleados que tienen salario mayor que 1200 menos los que tienen comisión mayor que 100.
+
+
+
+49.Crea la vista empleados que muestra los departamentos de los empleados. ¿Qué sucede?
+
+
+
+53.Crea la vista led que relacione los usuarios con sus departamentos incluyendo los departamentos que no tengan usuarios asignados. Consulta los datos que contiene.
+
+
+
+55.Vuelve a consultar los datos de la vista led. ¿Qué diferencias observas con la consulta realizada en el punto 53?
