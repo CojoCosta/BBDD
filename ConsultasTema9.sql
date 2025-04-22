@@ -89,12 +89,12 @@ CREATE OR REPLACE view ed2(nombredelempleado, nombredeldepartamento) AS SELECT n
 
 
 35. Elimina la vista ed.
-
+DROP VIEW ed;
 
 
 36.Consulta los datos de la vista ed2. ¿Que sucede?.
-
-
+SELECT * FROM ed2;
+Da este error "#1356 - View 'tema5.ed2' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them"
 
 42. Muestra la sentencia de creación de la vista notas_asig_alu.
 
