@@ -96,24 +96,31 @@ DROP VIEW ed;
 SELECT * FROM ed2;
 Da este error "#1356 - View 'tema5.ed2' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them"
 
-42. Muestra la sentencia de creación de la vista notas_asig_alu.
+39. Crea la vista notas_asig_alu que relacione los alumnos con sus asignaturas y notas.
+CREATE VIEW notas_asig_alu AS SELECT * FROM asignaturas JOIN alumnos JOIN notas on asignaturas.COD = notas.asignatura and alumnos.codigo = notas.alumno;
 
+
+40. Consulta los datos de la vista notas_asig_alu.
+SELECT * FROM notas_asig_alu;
+
+
+42. Muestra la sentencia de creación de la vista notas_asig_alu.
+SHOW CREATE notas_asig_alu;
 
 
 43.Crea la vista notasAlu a partir de la vista notas_asig_alu que muestre los siguientes campos: el nombre como nombre, la asignatura como materia y la nota como calificación de aquellos alumnos que han aprobado.
-
-
+CREATE VIEW notasAlu (nombre, materia, calificaciones) AS SELECT nombre, materia, calificaciones FROM notas_asig_alu;
 
 45. Modifica la vista notasAlu con alter view y añádele el campo Apellido.
-
+ALTER VIEW notasAlu ADD apellidos;
 
 
 47.Crea la vista salarios que muestre el apellido y la localización de los empleados que tienen salario mayor que 1200 menos los que tienen comisión mayor que 100.
-
+CREATE VIEW salarios(apellido, localización) AS SELECT apellido, loc FROM empleados JOIN depart USING(IDDEPART) WHERE salario > 1200 AND ifnull(comision,0) < 100;
 
 
 49.Crea la vista empleados que muestra los departamentos de los empleados. ¿Qué sucede?
-
+CREATE VIEW empleados 
 
 
 53.Crea la vista led que relacione los usuarios con sus departamentos incluyendo los departamentos que no tengan usuarios asignados. Consulta los datos que contiene.
@@ -121,3 +128,5 @@ Da este error "#1356 - View 'tema5.ed2' references invalid table(s) or column(s)
 
 
 55.Vuelve a consultar los datos de la vista led. ¿Qué diferencias observas con la consulta realizada en el punto 53?
+SELECT * FROM led;
+No observamos ningun cambio porque no hicimos el ejercicio 54.
