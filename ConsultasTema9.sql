@@ -117,3 +117,4 @@ CREATE VIEW empleados (empleado, departamentos) AS SELECT apellido, nombre FROM 
 
 
 53.Crea la vista led que relacione los usuarios con sus departamentos incluyendo los departamentos que no tengan usuarios asignados. Consulta los datos que contiene.
+CREATE OR REPLACE VIEW led AS SELECT * FROM empleados RIGHT JOIN depart USING (IDDEPART);
