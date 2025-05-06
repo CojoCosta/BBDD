@@ -136,12 +136,11 @@ BEGIN;
 INSERT INTO transacción VALUES (20);
 SELECT * FROM transacción;
 
-
 62. En la conexión 1 comienza una transacción e inserta el valor 20. Muestra los datos de la tabla transacción. En la conexión2 muestra los datos de la tabla transacción. ¿Qué ha sucedido?.
-
+-- No se ve el dato introducido por no realizar el COMMIT.
 
 63.Confirma los cambios en la conexión1. Muestra los datos tanto en la conexión1 como en la conexión2. ¿Qué ha sucedido?.
-
+-- Se ven los cambios por haber realizado el COMMIT.
 
 66.Comenzamos una transacción e insertamos el valor 100 en la tabla transacciones.
 Realizamos los siguientes pasos visualizando cada uno de ellos:
