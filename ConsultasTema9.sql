@@ -153,16 +153,55 @@ Realizamos los siguientes pasos visualizando cada uno de ellos:
 · Volvemos al punto tres.
 · Volvemos al punto dos.
 · Realizamos un commit.
-· Volvemos al punto 1 ¿Qué ha sucedido?.
+· Volvemos al punto 1 ¿Qué ha sucedido?. Da error porque con el COMMIT estamos fuera de la transaccion
+BEGIN;
+INSERT INTO transacción VALUES (100);
+SELECT * FROM transacción;
+SAVEPOINT punto1;
+SELECT * FROM transacción;
+UPDATE transacción SET valores = 101 WHERE valores = 100;
+SELECT * FROM transacción;
+SAVEPOINT punto2;
+SELECT * FROM transacción;
+INSERT INTO transacción VALUES (102)
+SELECT * FROM transacción;
+SAVEPOINT punto3;
+SELECT * FROM transacción;
+INSERT INTO transacción VALUES (103)
+SELECT * FROM transacción;
+ROLLBACK TO punto3;
+SELECT * FROM transacción;
+ROLLBACK TO punto2;
+SELECT * FROM transacción;
+COMMIT;
+SELECT * FROM transacción;
+ROLLBACK TO punto1;
+SELECT * FROM transacción;
 
 
-67.Comienza una transacción e inserta el valor 110. Creamos un punto de recuperación uno. Insertamos el valor 111 y creamos la base de datos tema9 y volvemos al punto de restauración uno. ¿Qué ha pasado?.
+67.Comienza una transacción e inserta el valor 110. Creamos un punto de recuperación uno. Insertamos el valor 111 y creamos la base de datos tema9 y volvemos al punto de restauración uno. ¿Qué ha pasado?.--Da error porque con la creación de una base de datos es como con el  COMMIT, estamos fuera de la transaccion
+BEGIN;
+INSERT INTO transacción VALUES(110);
+SAVEPOINT punto1;
+INSERT INTO transacción VALUES(111);
+CREATE DATABASE tema9;
+ROLLBACK TO punto1;
 
 
-68.Comienza una transacción e inserta el valor 120. Creamos un punto de recuperación  uno. Insertamos el valor 121 y volvemos a crear el punto de restauración uno. Volvemos al punto de restauración uno. ¿Qué ha pasado?. Inserta el valor 122. Realiza un commit y vuelve al punto de restauración uno. ¿Qué ha pasado?.
+68.Comienza una transacción e inserta el valor 120. Creamos un punto de recuperación  uno. Insertamos el valor 121 y volvemos a crear el punto de restauración uno. Volvemos al punto de restauración uno. ¿Qué ha pasado?. Inserta el valor 122. Realiza un commit y vuelve al punto de restauración uno. ¿Qué ha pasado?. --Da error porque con el COMMIT estamos fuera de la transaccion
+BEGIN;
+INSERT INTO transacción VALUES(120);
+SAVEPOINT punto1;
+INSERT INTO transacción VALUES(121);
+SAVEPOINT punto2;
+ROLLBACK TO punto1;
+INSERT INTO transacción VALUES(122);
+COMMIT;
+ROLLBACK TO punto1;
 
 
 69.Bloquear la tabla transacción para lectura en la conexión1. Visualizar los datos en la conexion1 y la conexion2. Intenta insertar en ambas conexiones. ¿Qué sucede?. Libera el bloqueo.
+
 
 
 70.Bloquear la tabla transacción para escritura. Visualiza los datos en la conexion1 y la conexion2. Intenta insertar un valor en la conexion1 y la conexion2. ¿Qué sucede?. Libera el bloqueo.
