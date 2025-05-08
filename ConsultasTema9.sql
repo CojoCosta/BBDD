@@ -166,7 +166,7 @@ SELECT * FROM transacción;
 INSERT INTO transacción VALUES (102)
 SELECT * FROM transacción;
 SAVEPOINT punto3;
-SELECT * FROM transacción;
+SELECT * FROM transacción; negado
 INSERT INTO transacción VALUES (103)
 SELECT * FROM transacción;
 ROLLBACK TO punto3;
@@ -193,18 +193,38 @@ BEGIN;
 INSERT INTO transacción VALUES(120);
 SAVEPOINT punto1;
 INSERT INTO transacción VALUES(121);
-SAVEPOINT punto2;
-ROLLBACK TO punto1;
+SAVEPOINT punto1;
+ROLLBACK TO punto1; -- Vuelve al que hemos creado de ultimo porque lo sobreescribe
 INSERT INTO transacción VALUES(122);
 COMMIT;
 ROLLBACK TO punto1;
 
 
 69.Bloquear la tabla transacción para lectura en la conexión1. Visualizar los datos en la conexion1 y la conexion2. Intenta insertar en ambas conexiones. ¿Qué sucede?. Libera el bloqueo.
+LOCK TABLE transacción READ;
+SELECT * FROM transacción;
 
+INSERT INTO transacción VALUES (15) --INTENTO. EN LA QUE YO HAGO DA ERROR Y LA OTRA QUEDA CARGANDO HASTA EL DESBLOQUEO
+UNLOCK TABLES;
 
 
 70.Bloquear la tabla transacción para escritura. Visualiza los datos en la conexion1 y la conexion2. Intenta insertar un valor en la conexion1 y la conexion2. ¿Qué sucede?. Libera el bloqueo.
+LOCK TABLE transacción WRITE;
+SELECT * FROM transacción;
+
+INSERT INTO transacción VALUES (15) --INTENTO. EN LA QUE BLOQUEO FUNCIONA Y LA OTRA NO
+UNLOCK TABLES;
 
 
 71.Vamos a crear tres conexiones contra el servidor MySQL. En la primera creamos un bloqueo de lectura sobre la tabla transacción, en la segunda un bloqueo de escritura y en la tercera un bloqueo de lectura. Consulta los datos en las tres conexiones. ¿Qué sucede?.
+--1ª
+LOCK TABLE transacción READ;  
+SELECT * FROM transacción;
+
+--2ª
+LOCK TABLE transacción WRITE; 
+SELECT * FROM transacción;
+
+--3ª
+LOCK TABLE transacción READ;  
+SELECT * FROM transacción;
