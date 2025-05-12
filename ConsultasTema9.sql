@@ -209,7 +209,7 @@ UNLOCK TABLES;
 
 
 70.Bloquear la tabla transacción para escritura. Visualiza los datos en la conexion1 y la conexion2. Intenta insertar un valor en la conexion1 y la conexion2. ¿Qué sucede?. Libera el bloqueo.
-LOCK TABLE transacción WRITE;
+LOCK TABLES transacción WRITE;
 SELECT * FROM transacción;
 
 INSERT INTO transacción VALUES (15) --INTENTO. EN LA QUE BLOQUEO FUNCIONA Y LA OTRA NO
@@ -218,13 +218,17 @@ UNLOCK TABLES;
 
 71.Vamos a crear tres conexiones contra el servidor MySQL. En la primera creamos un bloqueo de lectura sobre la tabla transacción, en la segunda un bloqueo de escritura y en la tercera un bloqueo de lectura. Consulta los datos en las tres conexiones. ¿Qué sucede?.
 --1ª
-LOCK TABLE transacción READ;  
+LOCK TABLES transacción READ;  
 SELECT * FROM transacción;
+--PARA QUE EL RESTO FUNCIONE
+UNLOCK TABLES;
 
---2ª
-LOCK TABLE transacción WRITE; 
+--2ª SE QUEDA AL BLOQUEO DE QUE SE DESBLOQUEE EL PRIMER BLOQUEO
+LOCK TABLES transacción WRITE; 
 SELECT * FROM transacción;
+--PARA QUE EL RESTO FUNCIONE
+UNLOCK TABLES;
 
---3ª
-LOCK TABLE transacción READ;  
+--3ª SE QUEDA AL BLOQUEO DE QUE SE DESBLOQUEE EL PRIMER Y SEGUNDO BLOQUEO
+LOCK TABLES transacción READ;  
 SELECT * FROM transacción;
