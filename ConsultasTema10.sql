@@ -46,25 +46,44 @@ DELIMITER ;
 
 --15. Crea un procedimiento que devuelva, como parámetro, el máximo salario de la tabla emple.
 DELIMITER $
-CREATE PROCEDURE SalarioMaximo(OUT maxSalario int)
+CREATE or REPLACE PROCEDURE SalarioMaximo(OUT maxSalario int)  
 BEGIN
-SELECT MAX(SALARIO) FROM empleados ORDER BY SALARIO DESC LIMIT 1;
-END $
+SELECT MAX(SALARIO) INTO maxSalario FROM empleados;
+END$
 DELIMITER ;
-
 
 -- 16. Muestra un procedimiento que devuelva, como parámetro, el número de departamentos distintos hay en la tabla emple. El procedimiento se ha de ejecutar con los permisos del usuario que lo crea
 DELIMITER $
-CREATE PROCEDURE muestraDepart(OUT numDepart int)
+CREATE OR REPLACE PROCEDURE muestraDepart(OUT numDepart int) SQL SECURITY DEFINER
 BEGIN
-SELECT COUNT(DISTINCT nombre) FROM depart;
+SELECT COUNT(DISTINCT IDDEPART) INTO numDepart FROM empleados;
 END $
 DELIMITER ;
+--MOSTRAR--
+Set @numero = 0;
+call muestraDepart(@numero);
+SELECT @numero;
 
 -- 17. Crea un procedimiento para insertar un nuevo alumno en la tabla alumnos. El procedimiento se ha de ejecutar con los permisos del usuario que lo invoca.
-
+DELIMITER $
+CREATE OR REPLACE PROCEDURE insertAlumno(IN NOM VARCHAR(255),IN APE VARCHAR(255), IN ALT INT, IN AUL INT) SQL SECURITY INVOKER
+BEGIN
+INSERT INTO alumnos (nombre, apellidos, altura, aula) Values 
+(NOM, APE, ALT, AUL);
+END $
+DELIMITER ;
+--Prueba
+call insertAlumno;
+SELECT insertAlumno;
 
 -- 18. Crea una función que pasándole un oficio nos devuelva el número de empleados con ese oficio. Se ha de crear el procedimiento para el usuario root conectado desde la maquina local.
+DELIMITER $
+CREATE OR REPLACE DEFINER = root@localhost FUNCTION empleadosOficio(out oficioAElegir VARCHAR(255)) RETURNS INT
+BEGIN
+SELECT COUNT(*) AS 'recuento' FROM empleados WHERE oficio = oficioAElegir;
+RETURN recuento;
+END $
+DELIMITER ;
 
 
 -- 19. Crea un procedimiento, que pasándole un oficio, nos devuelva el número de empleados con ese oficio.
