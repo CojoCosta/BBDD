@@ -73,7 +73,7 @@ INSERT INTO alumnos (nombre, apellidos, altura, aula) Values
 END $
 DELIMITER ;
 --Prueba
-call insertAlumno;
+call insertAlumno(PARAMETROS Y QUE LOS PONGA OTRO);
 SELECT insertAlumno;
 
 -- 18. Crea una función que pasándole un oficio nos devuelva el número de empleados con ese oficio. Se ha de crear el procedimiento para el usuario root conectado desde la maquina local.
@@ -87,6 +87,38 @@ DELIMITER ;
 
 
 -- 19. Crea un procedimiento, que pasándole un oficio, nos devuelva el número de empleados con ese oficio.
+DELIMITER $
+CREATE OR REPLACE PROCEDURE CONTADOROFICIOS (IN TRABAJOS VARCHAR(255))
+BEGIN
+SELECT COUNT(*) AS 'CANTIDAD EMPLEADOS' FROM empleados WHERE OFICIO = TRABAJOS;
+END $
+DELIMITER ;
+
+CALL CONTADOROFICIOS('Empleado');
+-- 20. Vamos a crear una función determinista que califica el salario de los empleados  con una cadena de texto: si el salario es superior o igual 5000 Alto, si es mayor o igual que 3000 pero menor 5000 Medio y bajo en los demás casos. Luego de la definición del procedimiento muestra los datos de los empleados con su salario calificado.
+--IF--
+DELIMITER $
+CREATE FUNCTION califica(salario int) RETURNS VARCAHR(255)
+DETERMINISTIC
+BEGIN
+IF SALARIO >= 5000 THEN RETURN "ALTO";
+ELSEIF SALARIO <5000 AND SALARIO >= 3000 THEN RETURN "MEDIO";
+ELSE RETURN "BAJO";
+END IF;
+END $
+DELIMITER ;
+--WHEN--
+DELIMITER $
+CREATE FUNCTION califica(salario int) RETURNS VARCAHR(255)
+DETERMINISTIC
+BEGIN
+CASE
+WHEN SALARIO >= 5000 THEN RETURN "ALTO";
+WHEN SALARIO <5000 AND SALARIO >= 3000 THEN RETURN "MEDIO";
+ELSE RETURN "BAJO";
+END CASE;
+END $
+DELIMITER ;
 
 -- 21. Crea un procedimiento que busque en la tabla empleados todos los empleados en que sus apellidos cumpla con un patrón.
 
@@ -96,8 +128,6 @@ DELIMITER ;
 
 -- 23. Crea un función que dado un empleado calcule el número de años que lleva en la empresa.
 
-
--- 20. Vamos a crear una función determinista que califica el salario de los empleados  con una cadena de texto: si el salario es superior o igual 5000 Alto, si es mayor o igual que 3000 pero menor 5000 Medio y bajo en los demás casos. Luego de la definición del procedimiento muestra los datos de los empleados con su salario calificado.
 
 
 -- 24. Crea un procedimiento que busque en la tabla empleados todos los empleados en que sus apellidos cumpla con un patrón. Además deberá mostrar el número de empleados que cumple el patrón. Ha de tener el comentario de "busca procedimiento".
