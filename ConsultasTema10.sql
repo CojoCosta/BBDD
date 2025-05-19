@@ -121,10 +121,25 @@ END $
 DELIMITER ;
 
 -- 21. Crea un procedimiento que busque en la tabla empleados todos los empleados en que sus apellidos cumpla con un patrón.
+DELIMITER $
+CREATE OR REPLACE PROCEDURE BUSCAREMPLEADOS (IN PATRON VARCHAR(255))
+BEGIN
+SELECT * FROM empleados WHERE apellido = PATRON;
+END $
+DELIMITER ;
+
+CALL BUSCAREMPLEADOS('%z');
 
 
 -- 22. Crea un procedimiento que indicado un empleado le aumente la comisión en un cifra determinada.
+DELIMITER $
+CREATE OR REPLACE PROCEDURE AUMENTOCOMISION (IN TRABAJADOR VARCHAR(255), IN AUMENTO INT)
+BEGIN
+UPDATE empleados SET COMISION = ifnull(COMISION,0) + AUMENTO WHERE APELLIDO = TRABAJADOR; 
+END $
+DELIMITER ;
 
+CALL AUMENTOCOMISION('Sanchez', 5000000);
 
 -- 23. Crea un función que dado un empleado calcule el número de años que lleva en la empresa.
 
