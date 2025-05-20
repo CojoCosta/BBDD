@@ -133,20 +133,34 @@ CALL BUSCAREMPLEADOS('%z');
 
 -- 22. Crea un procedimiento que indicado un empleado le aumente la comisión en un cifra determinada.
 DELIMITER $
-CREATE OR REPLACE PROCEDURE AUMENTOCOMISION (IN TRABAJADOR VARCHAR(255), IN AUMENTO INT)
+CREATE OR REPLACE PROCEDURE AUMENTOCOMISION (IN CODIGO INT, IN AUMENTO INT)
 BEGIN
-UPDATE empleados SET COMISION = ifnull(COMISION,0) + AUMENTO WHERE APELLIDO = TRABAJADOR; 
+UPDATE empleados SET COMISION = ifnull(COMISION,0) + AUMENTO WHERE CODIGO = CODEMP; 
 END $
 DELIMITER ;
 
-CALL AUMENTOCOMISION('Sanchez', 5000000);
+CALL AUMENTOCOMISION(2, 5000000);
 
 -- 23. Crea un función que dado un empleado calcule el número de años que lleva en la empresa.
-
-
+DELIMITER $ 
+CREATE OR REPLACE FUNCTION numeroAños(TRABAJADOR VARCHAR(255)) RETURNS INT
+BEGIN
+DECLARE A int;
+SELECT TIMESTAMPDIFF(YEAR, FECHA_ALT, CURRENT_DATE) INTO A FROM empleados WHERE APELLIDO = TRABAJADOR;
+RETURN A;
+END $
+DELIMITER ;
+--prueba
+SELECT numeroAños('Sanchez');
 
 -- 24. Crea un procedimiento que busque en la tabla empleados todos los empleados en que sus apellidos cumpla con un patrón. Además deberá mostrar el número de empleados que cumple el patrón. Ha de tener el comentario de "busca procedimiento".
-
+DELIMITER $
+CREATE OR REPLACE PROCEDURE APELLIDOSYNUM (IN PATRON VARCHAR(255)) COMMENT 'busca procedimiento'
+BEGIN
+SELECT COUNT(*) AS 'numEmpleados' FROM empleados WHERE apellido = PATRON;
+SELECT * FROM empleados WHERE apellido = PATRON;
+END $ 
+DELIMITER ;
 
 -- 26. Crea un procedimiento que indicándole un código de empleado nos devuelva el tipo de salario: El cual puede ser bajo si cobra menos de 2000, medio si cobra 2000 o más pero menos de 4000 y alto el resto. El procedimiento se ha de ejecutar con los permisos del usuario que lo invoca y se debe crear para el  usuario user desde la maquina local.
 
