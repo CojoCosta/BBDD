@@ -143,10 +143,11 @@ CALL AUMENTOCOMISION(2, 5000000);
 
 -- 23. Crea un función que dado un empleado calcule el número de años que lleva en la empresa.
 DELIMITER $ 
-CREATE OR REPLACE FUNCTION numeroAños(TRABAJADOR VARCHAR(255)) RETURNS INT
+CREATE OR REPLACE FUNCTION numeroAños(CODIGO INT) RETURNS INT
 BEGIN
 DECLARE A int;
-SELECT TIMESTAMPDIFF(YEAR, FECHA_ALT, CURRENT_DATE) INTO A FROM empleados WHERE APELLIDO = TRABAJADOR;
+SELECT TIMESTAMPDIFF(YEAR, FECHA_ALT, CURRENT_DATE) INTO A FROM empleados WHERE CODIGO = CODEMP; 
+END $
 RETURN A;
 END $
 DELIMITER ;
@@ -162,15 +163,18 @@ SELECT * FROM empleados WHERE apellido = PATRON;
 END $ 
 DELIMITER ;
 
+-- 25. Crea un procedimiento que busque en la tabla empleados todos los empleados en que su apellidos cumpla con dos patrones. Si uno de ellos es nulo no se ha de tener en cuenta.
+DELIMITER $
+CREATE OR REPLACE PROCEDURE APELLIDOSYNUM (IN PATRON VARCHAR(255), IN PATRON1 VARCHAR(255))
+BEGIN
+SELECT COUNT(*) AS 'numEmpleados' FROM empleados WHERE apellido = ifnull(PATRON,'') AND apellido = ifnull(PATRON1,'');
+SELECT * FROM empleados WHERE apellido = ifnull(PATRON,'') AND apellido = ifnull(PATRON1,'');
+END $ 
+DELIMITER ;
+
+
 -- 26. Crea un procedimiento que indicándole un código de empleado nos devuelva el tipo de salario: El cual puede ser bajo si cobra menos de 2000, medio si cobra 2000 o más pero menos de 4000 y alto el resto. El procedimiento se ha de ejecutar con los permisos del usuario que lo invoca y se debe crear para el  usuario user desde la maquina local.
 
--- 29. Define una función que devuelva el valor de la suma de los números desde 1 hasta el valor indicado en el parámetro (este valor está incluido en la suma). Hay que usar el bucle loop.
 
--- 32. Define un procedimiento que devuelva el valor de la suma de los números impares desde 1 hasta el valor indicado en el parámetro (este valor está incluido en la suma). Hay que usar el bucle While.
-
--- 34. Crea un procedimiento que pasándole una operación y una fecha nos indique los  siguientes eventos de la tabla agenda:
--- · A: Todas las actividades del mismo año que la fecha.
--- · M: Todas las actividades del mismo mes y año que la fecha.
--- · S: Todas las actividades de la misma semana y año que la fecha.
--- · D: Actividades del mismo día y año que la fecha.
--- · P: Actividades del mes siguiente a la fecha.
+-- 27. Crea una función con dos parámetros: El primero será un número entero que representara un salario, el segundo será 0, 1 o -1. Si el segundo parámetro es 0 nos devolverá el número de empleado con un salario igual al primer parámetro.
+-- Si vale 1 el número de empleados con un salario mayor y si vale -1 el número de empleados con un salario menor.
