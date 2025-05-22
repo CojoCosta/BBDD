@@ -167,14 +167,66 @@ DELIMITER ;
 DELIMITER $
 CREATE OR REPLACE PROCEDURE APELLIDOSYNUM (IN PATRON VARCHAR(255), IN PATRON1 VARCHAR(255))
 BEGIN
-SELECT COUNT(*) AS 'numEmpleados' FROM empleados WHERE apellido = ifnull(PATRON,'') AND apellido = ifnull(PATRON1,'');
-SELECT * FROM empleados WHERE apellido = ifnull(PATRON,'') AND apellido = ifnull(PATRON1,'');
+SELECT COUNT(*) AS 'numEmpleados' FROM empleados WHERE apellido LIKE ifnull(PATRON,'%') AND apellido LIKE ifnull(PATRON1,'%');
+SELECT * FROM empleados WHERE apellido LIKE ifnull(PATRON,'%') AND apellido LIKE ifnull(PATRON1,'%');
 END $ 
 DELIMITER ;
 
 
 -- 26. Crea un procedimiento que indicándole un código de empleado nos devuelva el tipo de salario: El cual puede ser bajo si cobra menos de 2000, medio si cobra 2000 o más pero menos de 4000 y alto el resto. El procedimiento se ha de ejecutar con los permisos del usuario que lo invoca y se debe crear para el  usuario user desde la maquina local.
-
+DELIMITER $
+CREATE OR REPLACE DEFINER = user@localhost PROCEDURE TIPOSALARIO(IN CODIGO INT) SQL SECURITY INVOKER
+BEGIN 
+DECLARE TIPO VARCHAR(255);
+DECLARE SALARIO1 INT;
+SET TIPO = "";
+SET SALARIO1 = (SELECT SALARIO FROM empleados WHERE CODEMP = CODIGO);
+IF SALARIO1 < 2000 THEN SET TIPO = 'Bajo';
+ELSEIF SALARIO1 >= 2000 AND SALARIO1 < 4000 THEN SET TIPO = 'Medio';
+ELSE SET TIPO = 'Alto';
+END IF;
+SELECT CODEMP,apellido, TIPO FROM empleados;
+END $
+DELIMITER ;
 
 -- 27. Crea una función con dos parámetros: El primero será un número entero que representara un salario, el segundo será 0, 1 o -1. Si el segundo parámetro es 0 nos devolverá el número de empleado con un salario igual al primer parámetro.
 -- Si vale 1 el número de empleados con un salario mayor y si vale -1 el número de empleados con un salario menor.
+------------------------CON IF--------------------------
+DELIMITER $
+CREATE OR REPLACE FUNCTION compara(SUELDO INT, COMPARADOR INT) RETURNS INT 
+BEGIN 
+DECLARE N INT; 
+IF COMPARADOR = 0 THEN SET N = (SELECT COUNT(*) FROM empleados WHERE SALARIO = SUELDO);
+ELSEIF COMPARADOR = 1 THEN SET N =(SELECT COUNT(*) FROM empleados WHERE SALARIO > SUELDO);
+ELSEIF COMPARADOR = -1 THEN SET N = (SELECT COUNT(*) FROM empleados WHERE SALARIO < SUELDO);
+ELSE SET N = (SELECT 'Parametro incorrecto' AS '¡ERROR!' FROM empleados);
+END IF;
+RETURN N;
+END $
+DELIMITER ;
+
+----------------------SIN DECLARAR-----------------------
+DELIMITER $
+CREATE or replace function salario27(sal INT, num INT) RETURNS INT
+BEGIN
+	if num = 0 then RETURN (SELECT COUNT(*) FROM empleados WHERE SALARIO = SAL);
+	ELSEIF num = 1 then RETURN (SELECT COUNT(*) FROM empleados WHERE SALARIO > SAL);
+	ELSEIF num = -1 then return (SELECT COUNT(*) FROM empleados WHERE SALARIO < SAL);
+ELSE return (SELECT 'Parametro incorrecto' AS '¡ERROR!' FROM empleados);
+END if;
+END $
+delimiter ;
+
+-----------------------CON CASE---------------------------
+DELIMITER $
+CREATE or replace function salario27(sal INT, num INT) RETURNS INT
+BEGIN
+CASE 
+	WHEN num = 0 then RETURN (SELECT COUNT(*) FROM empleados WHERE SALARIO = SAL);
+	WHEN num = 1 then RETURN (SELECT COUNT(*) FROM empleados WHERE SALARIO > SAL);
+	WHEN num = -1 then return (SELECT COUNT(*) FROM empleados WHERE SALARIO < SAL);
+ELSE return (SELECT 'Parametro incorrecto' AS '¡ERROR!' FROM empleados);
+END CASE;
+END $
+delimiter ;
+
