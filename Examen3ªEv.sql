@@ -16,3 +16,7 @@ SELECT clientes.nombre, clientes.apellidos, clientes.lema, objetos.nombre FROM c
 
 -- 6.-
 SELECT * FROM objetos JOIN clientes JOIN ventas ON objetos.cod = ventas.objeto AND clientes.id = ventas.idcliente WHERE clientes.apellidos LIKE 'Lannister' AND objetos.stock > (SELECT objetos.stock FROM objetos WHERE objetos.nombre like 'Acero valyrio');
+
+-- Ejercicio 4
+-- Vista
+CREATE VIEW vis (cliente, objeto, precio, cantidad) AS SELECT clientes.nombre, objetos.nombre, objetos.precio, ventas.cant FROM objetos JOIN ventas JOIN clientes ON objetos.cod = ventas.objeto AND clientes.id = ventas.idcliente WHERE objetos.stock > 10;
