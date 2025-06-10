@@ -61,3 +61,19 @@ SET resultado = cantidad * precio;
 RETURN resultado;
 END $
 DELIMITER ;
+
+SELECT multiplica(3);
+
+-- OTRA FORMA
+delimiter $
+CREATE or replace FUNCTION parametro (venta_id INT)
+RETURNS FLOAT
+BEGIN
+DECLARE total FLOAT;        
+set total= (SELECT v.cant * o.precio FROM ventas v JOIN objetos o ON v.objeto = o.cod WHERE v.idventa=venta_id);
+
+RETURN total;
+END $
+delimiter ;
+
+SELECT parametro(1);
