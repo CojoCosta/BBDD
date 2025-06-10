@@ -20,3 +20,44 @@ SELECT * FROM objetos JOIN clientes JOIN ventas ON objetos.cod = ventas.objeto A
 -- Ejercicio 4
 -- Vista
 CREATE VIEW vis (cliente, objeto, precio, cantidad) AS SELECT clientes.nombre, objetos.nombre, objetos.precio, ventas.cant FROM objetos JOIN ventas JOIN clientes ON objetos.cod = ventas.objeto AND clientes.id = ventas.idcliente WHERE objetos.stock > 10;
+
+-- Ejercicio 5
+-- a)
+DELIMITER $
+CREATE OR REPLACE PROCEDURE posicion (in apellido VARCHAR(255), IN inicio INT, in final INT, OUT salida INT) 
+BEGIN
+if (inicio > final) THEN SET salida =(-1);
+ELSE SET  salida = final - inicio;
+END if;
+END $
+DELIMITER ;
+
+SET @dif = 0;
+CALL posicion('Stark', 4, 6, @dif);
+SELECT @dif;
+
+
+-- b)
+DELIMITER $
+CREATE OR REPLACE PROCEDURE suma(IN ventaID INT)
+BEGIN
+SELECT ventas.cant FROM ventas WHERE ventas.idventa = ventaID;
+UPDATE ventas SET ventas.cant = ventas.cant + 1 WHERE ventas.idventa = ventaID;
+SELECT ventas.cant FROM ventas WHERE ventas.idventa = ventaID;
+END $
+DELIMITER ;
+
+
+-- c)
+DELIMITER $
+CREATE OR REPLACE FUNCTION multiplica(ventaID INT) RETURNS FLOAT
+BEGIN 
+DECLARE cantidad INT;
+DECLARE precio FLOAT;
+DECLARE resultado FLOAT;
+SELECT ventas.cant INTO cantidad FROM ventas WHERE ventas.idventa = ventaID;
+SELECT objetos.precio INTO precio FROM ventas JOIN objetos ON ventas.objeto = objetos.cod WHERE ventas.idventa = ventaID;
+SET resultado = cantidad * precio;
+RETURN resultado;
+END $
+DELIMITER ;
