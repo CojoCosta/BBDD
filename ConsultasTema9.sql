@@ -36,12 +36,12 @@ GRANT ALL ON tema5.depart TO user3@"192*";
 
 
 -- 18.
-RENAME USER user2@localhost TO usuario2@localhost IDENTIFIED BY 'pass2'
-RENAME USER user3@'192*' TO usuario3@'192*' IDENTIFIED BY 'pass3'
+RENAME USER user2@localhost TO usuario2@localhost;
+RENAME USER user3@'192*' TO usuario3@'192*';
 
 
 -- 19.
-REVOKE SELECT ON *.* TO usuario3@'192*';
+REVOKE SELECT ON *.* FROM usuario3@'192*';
 
 
 -- 20.
@@ -63,7 +63,8 @@ UPDATE empleados.JEFE SET JEFE=2 WHERE JEFE=1;
 
 
 -- 27.
-CREATE OR REPLACE // ALTER USER user1@localhost IDENTIFIED BY pass WITH MAX_USER_CONNECTIONS_PER_HOUR 2;
+CREATE OR REPLACE
+ALTER USER user1@localhost IDENTIFIED BY pass WITH MAX_USER_CONNECTIONS_PER_HOUR 2;
 
 
 -- 28.
